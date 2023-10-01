@@ -1,0 +1,26 @@
+main.register{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aside{
+        width: 20%;
+        box-sizing: border-box;
+        padding: 30px;
+        border: 2px solid #ccc;
+        form{
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            input{
+                height: 20px;
+                &[type="submit"]{
+                    height: 30px;
+                    background-color: #001730;
+                    color: #4ad7da;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

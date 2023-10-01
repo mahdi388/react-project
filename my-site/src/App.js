@@ -1,47 +1,51 @@
 import "./styles/main.scss"
 import { useState } from "react";
 import ad1 from "./images/ad1.jpg"
+import {Routes,Route,Link} from 'react-router-dom'
+import Register from "./components/Register";
+import Login from "./components/Login";
 
 function App() {
-  const [user,setUser]=useState(null)
+  let localStorageHandler=()=>{
+    const localStorageUser=JSON.parse(localStorage.getItem('user'))
+    if(localStorageUser){
+      if(localStorageUser=="null"){
+        return null
+      }
+      return localStorageUser
+    }
+    localStorage.setItem('user',null)
+    return null
+  }
+  const [user,setUser]=useState(localStorageHandler())
+  const logout=()=>{
+    localStorage.setItem('user',null)
+    setUser(null)
+    alert("you are successfully logged out")
+  }
   return <>
     <header>
       <nav>
         <ul>
+          <li className="home"><b><Link to="/">Home</Link></b></li>
           <li>search rooms</li>
           <li>search food</li>
           {user && <li>reservation | 0$</li>}
         </ul>
         <ul>
-          {user ? <li>log out</li>:<><li>sing in</li><li>sign up</li></>}
+          {user ? 
+            <><li>Welcome {user.username}</li><li onClick={logout}>log out</li></>
+            :
+            <><li><Link to="/login">sing in</Link></li><li><Link to="/register">sign up</Link></li></>
+          }
         </ul>
       </nav>
     </header>
-    <main>
-    </main>
-      Lorem ipsum dolor sit amet consectetur, <br/>
-      adipisicing elit. Temporibus tenetur <br/>
-      vitae mollitia expedita voluptate nam <br/>
-      deleniti esse porro, quam nisi asperiores <br/>
-      voluptas itaque, vero impedit sunt cum <br/>
-      nemo suscipit laudantium.<br/>
-      Lorem ipsum dolor sit amet consectetur, <br/>
-      adipisicing elit. Temporibus tenetur <br/>
-      vitae mollitia expedita voluptate nam <br/>
-      deleniti esse porro, quam nisi asperiores <br/>
-      voluptas itaque, vero impedit sunt cum <br/>
-      nemo suscipit laudantium.<br/>
-      Lorem ipsum dolor sit amet consectetur, <br/>
-      adipisicing elit. Temporibus tenetur <br/>
-      vitae mollitia expedita voluptate nam <br/>
-      deleniti esse porro, quam nisi asperiores <br/>
-      voluptas itaque, vero impedit sunt cum <br/>
-      nemo suscipit laudantium.<br/>
-      Lorem ipsum dolor sit amet consectetur, <br/>
-      adipisicing elit. Temporibus tenetur <br/>
-      vitae mollitia expedita voluptate nam <br/>
-      deleniti esse porro, quam nisi asperiores <br/>
-      deleniti esse porro, quam nisi asperiores <br/>
+    <Routes>
+      <Route path="/" element={<>Home</>}></Route>
+      <Route path="/register" element={<Register setUser={setUser}/>}></Route>
+      <Route path="/login" element={<Login setUser={setUser}/>}></Route>
+    </Routes>
     <footer>
       <div className="concat-us">
         <div>Contact us</div>
