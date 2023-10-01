@@ -1,9 +1,10 @@
 import "./styles/main.scss"
 import { useState } from "react";
 import ad1 from "./images/ad1.jpg"
-import {Routes,Route,Link} from 'react-router-dom'
+import {Routes,Route,Link,Navigate} from 'react-router-dom'
 import Register from "./components/Register";
 import Login from "./components/Login";
+import NotFound from "./components/NotFound";
 
 function App() {
   let localStorageHandler=()=>{
@@ -45,6 +46,8 @@ function App() {
       <Route path="/" element={<>Home</>}></Route>
       <Route path="/register" element={<Register setUser={setUser}/>}></Route>
       <Route path="/login" element={<Login setUser={setUser}/>}></Route>
+      <Route path="/not-found" element={<NotFound/>}></Route>
+      <Route path="/*" element={<Navigate to="/not-found"/>}></Route>
     </Routes>
     <footer>
       <div className="concat-us">
