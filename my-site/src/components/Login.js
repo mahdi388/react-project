@@ -28,14 +28,6 @@ function Login({setUser}) {
         setUser(user)
         localStorage.setItem('user',JSON.stringify(user))
         navigate('/')
-        // let user={
-        //     username:event.target['username'].value,
-        //     password:event.target['password'].value
-        // }
-        // addUser(user).then(({data})=>{
-        //     setUser(data)
-        //     localStorage.setItem('user',JSON.stringify(data))
-        // })
     }
     return <main className="register">
         <aside>
@@ -43,7 +35,7 @@ function Login({setUser}) {
             <form onSubmit={submitHandler}>
                 <input type="text" id='username' placeholder='Enter username' required={true}/>
                 <input type="password" id='password' placeholder='Enter password' required={true}/>
-                <input type="submit" value="register"/>
+                <input type="submit" value="log in"/>
             </form>
         </aside>
     </main>;

@@ -5,6 +5,7 @@ import {Routes,Route,Link,Navigate} from 'react-router-dom'
 import Register from "./components/Register";
 import Login from "./components/Login";
 import NotFound from "./components/NotFound";
+import Rooms from "./components/Rooms";
 
 function App() {
   let localStorageHandler=()=>{
@@ -29,13 +30,13 @@ function App() {
       <nav>
         <ul>
           <li className="home"><b><Link to="/">Home</Link></b></li>
-          <li>search rooms</li>
+          <li><Link to="/rooms">search rooms</Link></li>
           <li>search food</li>
           {user && <li>reservation | 0$</li>}
         </ul>
         <ul>
           {user ? 
-            <><li>Welcome {user.username}</li><li onClick={logout}>log out</li></>
+            <><li className="welcome">Welcome {user.username}</li><li onClick={logout}>log out</li></>
             :
             <><li><Link to="/login">sing in</Link></li><li><Link to="/register">sign up</Link></li></>
           }
@@ -46,6 +47,7 @@ function App() {
       <Route path="/" element={<>Home</>}></Route>
       <Route path="/register" element={<Register setUser={setUser}/>}></Route>
       <Route path="/login" element={<Login setUser={setUser}/>}></Route>
+      <Route path="/rooms/*" element={<Rooms user={user}/>}></Route>
       <Route path="/not-found" element={<NotFound/>}></Route>
       <Route path="/*" element={<Navigate to="/not-found"/>}></Route>
     </Routes>
