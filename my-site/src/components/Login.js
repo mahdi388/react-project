@@ -27,7 +27,7 @@ function Login({setUser}) {
         alert("you are successfully logged in")
         setUser(user)
         localStorage.setItem('user',JSON.stringify(user))
-        navigate('/')
+        navigate(-1)
     }
     return <main className="register">
         <aside>

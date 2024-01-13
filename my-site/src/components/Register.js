@@ -19,7 +19,7 @@ function Register({setUser}) {
             setUser(data)
             localStorage.setItem('user',JSON.stringify(data))
         })
-        navigate('/')
+        navigate(-1)
     }
     return <main className="register">
         <aside>

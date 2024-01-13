@@ -4,6 +4,8 @@ import { useState,useMemo } from 'react'
 import {useNavigate,Link,Routes,Route} from 'react-router-dom'
 import Room from "./Room";
 import {useGetReservationsQuery,useAddReservationMutation} from "../redux/services/reservationsApi"
+import { useContext } from 'react'
+import {reservationsPriceContext,dateToString} from '../App'
 
 function Rooms({user}) {
     const {data:rooms,isSuccess}=useGetRoomsQuery()
@@ -14,6 +16,7 @@ function Rooms({user}) {
     const navigate=useNavigate()
     const [date,setDate]=useState(new Date(''))
     const [nights,setNights]=useState(1)
+    const getReservationsPrice=useContext(reservationsPriceContext)
     const matchLikes=(rooms)=>{
         try{
             return rooms.map(x=>{
@@ -49,7 +52,7 @@ function Rooms({user}) {
             }
         }
     }
-    const reserveHandler=(roomId)=>{
+    const reserveHandler=async (roomId)=>{
         if(user!=null) {
             if(isNaN(date)){
                 document.getElementById('date').setCustomValidity('Please enter date.')
@@ -72,13 +75,14 @@ function Rooms({user}) {
                 if(bookingAndBookedDates.length>0){
                     alert("This room is reserved on these dates:\n"+bookingAndBookedDates.map(date=>`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`).join('\n'))
                 }else{
-                    reserve({
+                    await reserve({
                         "user": user.id,
                         "room": roomId,
-                        "date": `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`,
-                        "nights": nights,
+                        "date": dateToString(date),
+                        "nights": Number(nights),
                         "is_finaly": false,
                     })
+                    getReservationsPrice()
                     alert("Your room has been successfully booked. Go to the reservation page to finalize.")
                 }
             }
@@ -87,29 +91,10 @@ function Rooms({user}) {
                 navigate('/login')
             }
         }
-        // try {
-        //     if(date===''){
-        //         document.getElementById('date').setCustomValidity('Please enter date.')
-        //         document.getElementById('date').reportValidity()
-        //     }else{
-        //         reserve({
-        //             "user": user.id,
-        //             "room": roomId,
-        //             "date": date,
-        //             "nights": Number(nights),
-        //             "is_finaly": false,
-        //         })
-        //         alert("Your room has been successfully booked. Go to the reservation page to finalize.")
-        //     }
-        // } catch {
-        //     if(window.confirm('To reserve this room you must be log in.\nDo you want to log in?')){
-        //         navigate('/login')
-        //     }
-        // }
     }
     const dateValue=()=>{
         try{
-            return date.toISOString().slice(0,10)
+            return dateToString(date)
         }
         catch{
             return ''
@@ -119,7 +104,7 @@ function Rooms({user}) {
         <div className="search">
             <div>
                 <label htmlFor="date">Date : </label>
-                <input type="date" min={new Date().toJSON().slice(0, 10)} id='date' value={dateValue()} onChange={event=>setDate(new Date(event.target.value))}/>
+                <input type="date" min={dateToString(new Date())} id='date' value={dateValue()} onChange={event=>setDate(new Date(event.target.value))}/>
             </div>
             <div>
                 <label htmlFor="nights">Nights : </label>

@@ -1,0 +1,42 @@
+main.main{
+    text-align: center;
+    min-height: calc(100vh - 213px);
+    width: 100%;
+    .welcome{
+        height: 145px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.25rem;
+    }
+    .gallery{
+        min-height: calc(100vh - 358px);
+        padding: 20px 0;
+        display: flex;
+        justify-content: center;
+        gap:20px;
+        img{
+            min-height: 220px;
+            max-height: calc(100vh - 388px);
+        }
+        &>div{
+            width: 293px;
+            min-height: 220px;
+            max-height: calc(100vh - 388px);
+            padding: 10px 0;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 30px;
+            .title{
+                font-size: 1.25rem;
+                word-spacing: 1px;
+            }
+            .desciption{
+                font-size: 1.1rem;
+                text-align: left;
+            }
+        }
+    }
+}

@@ -2,7 +2,7 @@ import {createApi,fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 
 const reservationsApi=createApi({
     reducerPath:'reservations',
-    baseQuery: fetchBaseQuery({baseUrl:'http://localhost:3030'}),
+    baseQuery: fetchBaseQuery({baseUrl:'http://192.168.1.10:3030'}),
     endpoints:builder=>({
         getReservations:builder.query({
             query:()=>'reservations',
