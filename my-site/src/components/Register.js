@@ -1,14 +1,20 @@
 import '../styles/register.scss'
 import {useAddUserMutation} from '../redux/services/usersApi'
 import {useNavigate} from 'react-router-dom'
+import axios from 'axios'
 
 function Register({setUser}) {
     const [addUser,{isLoading:isAddingUser}]=useAddUserMutation()
     const navigate=useNavigate()
-    const submitHandler=(event)=>{
+    const submitHandler=async (event)=>{
         event.preventDefault()
         if(event.target['password'].value!=event.target['repassword'].value){
             alert("The password was not repeated correctly")
+            return
+        }
+        let users=(await axios.get('users/')).data
+        if(users.map(i=>i.username).includes(event.target['username'].value)){
+            alert("The username is not new.")
             return
         }
         let user={

@@ -1,8 +1,9 @@
 import "../../styles/admin/main.scss"
-import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom'
+import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 import Login from "./Login";
 import AddAdmin from "./AddAdmin";
 import { useEffect, useState } from "react";
+import AddUser from "./AddUser";
 
 function AdminMain() {
     var navigate=useNavigate()
@@ -52,7 +53,7 @@ function AdminMain() {
                             <li className="home">
                                 <div>
                                     <b>
-                                        Home
+                                        <Link to="/admin">Home</Link>
                                     </b>
                                 </div>
                             </li>
@@ -60,7 +61,7 @@ function AdminMain() {
                                 <div>users</div>
                                 <ul>
                                     <li>list</li>
-                                    <li>add user</li>
+                                    <li><Link to='/admin/add-user'>add user</Link></li>
                                     <li><Link to='/admin/add-admin'>add admin</Link></li>
                                 </ul>
                             </li>
@@ -104,6 +105,7 @@ function AdminMain() {
         <Routes>
             <Route path="/login" element={<Login setAdmin={setAdmin}/>}></Route>
             <Route path="/add-admin" element={<AddAdmin/>}></Route>
+            <Route path="/add-user" element={<AddUser/>}></Route>
         </Routes>
     </>;
 }
