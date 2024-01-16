@@ -1,6 +1,7 @@
 import "../../styles/admin/main.scss"
 import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom'
 import Login from "./Login";
+import AddAdmin from "./AddAdmin";
 import { useEffect, useState } from "react";
 
 function AdminMain() {
@@ -60,7 +61,7 @@ function AdminMain() {
                                 <ul>
                                     <li>list</li>
                                     <li>add user</li>
-                                    <li>add admin</li>
+                                    <li><Link to='/admin/add-admin'>add admin</Link></li>
                                 </ul>
                             </li>
                             <li onMouseEnter={openUl} onMouseLeave={closeUl} onTouchEnd={openCloseUl}>
@@ -102,6 +103,7 @@ function AdminMain() {
         }
         <Routes>
             <Route path="/login" element={<Login setAdmin={setAdmin}/>}></Route>
+            <Route path="/add-admin" element={<AddAdmin/>}></Route>
         </Routes>
     </>;
 }

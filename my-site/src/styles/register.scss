@@ -14,13 +14,26 @@ main.register{
             display: flex;
             flex-direction: column;
             gap: 20px;
-            input{
+            &>input{
                 height: 20px;
                 &[type="submit"]{
                     height: 30px;
                     background-color: #001730;
                     color: #4ad7da;
                     cursor: pointer;
+                }
+            }
+            .manager{
+                height: 20px;
+                display: flex;
+                align-items: center;
+                input{
+                    margin: 0;
+                    cursor: pointer;
+                }
+                label{
+                    height: 20px;
+                    margin-right: 5px;
                 }
             }
         }
