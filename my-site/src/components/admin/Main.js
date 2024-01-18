@@ -4,6 +4,8 @@ import Login from "./Login";
 import AddAdmin from "./AddAdmin";
 import { useEffect, useState } from "react";
 import AddUser from "./AddUser";
+import Users from "./Users";
+import EditUser from "./EditUser";
 
 function AdminMain() {
     var navigate=useNavigate()
@@ -60,7 +62,7 @@ function AdminMain() {
                             <li onMouseEnter={openUl} onMouseLeave={closeUl} onTouchEnd={openCloseUl}>
                                 <div>users</div>
                                 <ul>
-                                    <li>list</li>
+                                    <li><Link to='/admin/list'>list</Link></li>
                                     <li><Link to='/admin/add-user'>add user</Link></li>
                                     <li><Link to='/admin/add-admin'>add admin</Link></li>
                                 </ul>
@@ -106,6 +108,8 @@ function AdminMain() {
             <Route path="/login" element={<Login setAdmin={setAdmin}/>}></Route>
             <Route path="/add-admin" element={<AddAdmin/>}></Route>
             <Route path="/add-user" element={<AddUser/>}></Route>
+            <Route path="/list" element={<Users/>}></Route>
+            <Route path="/edit-user/:id" element={<EditUser/>}></Route>
         </Routes>
     </>;
 }

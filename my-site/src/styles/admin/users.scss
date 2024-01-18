@@ -1,0 +1,22 @@
+main.users{
+    min-height: calc(100vh - 53px);
+    box-sizing: border-box;
+    padding: 70px;
+    table,thead,tbody,tr,td,th{
+        border: 1px solid black;
+    }
+    table{
+        border-collapse: collapse;
+        th{
+            width: 150px;
+        }
+        tr{
+            text-align: center;
+            height: 2rem;
+            i{
+                margin: 0 10px;
+                cursor: pointer;
+            }
+        }
+    }
+}
