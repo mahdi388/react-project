@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 import AddUser from "./AddUser";
 import Users from "./Users";
 import EditUser from "./EditUser";
+import AddRoom from "./AddRoom";
+import Rooms from "./Rooms";
+import EditRoom from "./EditRoom";
 
 function AdminMain() {
     var navigate=useNavigate()
@@ -62,7 +65,7 @@ function AdminMain() {
                             <li onMouseEnter={openUl} onMouseLeave={closeUl} onTouchEnd={openCloseUl}>
                                 <div>users</div>
                                 <ul>
-                                    <li><Link to='/admin/list'>list</Link></li>
+                                    <li><Link to='/admin/users'>list</Link></li>
                                     <li><Link to='/admin/add-user'>add user</Link></li>
                                     <li><Link to='/admin/add-admin'>add admin</Link></li>
                                 </ul>
@@ -70,8 +73,8 @@ function AdminMain() {
                             <li onMouseEnter={openUl} onMouseLeave={closeUl} onTouchEnd={openCloseUl}>
                                 <div>rooms</div>
                                 <ul>
-                                    <li>list</li>
-                                    <li>add room</li>
+                                    <li><Link to="rooms">list</Link></li>
+                                    <li><Link to="add-room">add room</Link></li>
                                 </ul>
                             </li>
                             <li onMouseEnter={openUl} onMouseLeave={closeUl} onTouchEnd={openCloseUl}>
@@ -95,7 +98,7 @@ function AdminMain() {
                                 Welcome {admin.username}
                             </div>
                         </li>
-                        <li onClick={logout}>
+                        <li style={{cursor:'pointer'}} onClick={logout}>
                             <div>
                                 log out
                             </div>
@@ -108,8 +111,11 @@ function AdminMain() {
             <Route path="/login" element={<Login setAdmin={setAdmin}/>}></Route>
             <Route path="/add-admin" element={<AddAdmin/>}></Route>
             <Route path="/add-user" element={<AddUser/>}></Route>
-            <Route path="/list" element={<Users/>}></Route>
+            <Route path="/users" element={<Users/>}></Route>
             <Route path="/edit-user/:id" element={<EditUser/>}></Route>
+            <Route path="/add-room" element={<AddRoom/>}></Route>
+            <Route path="/rooms" element={<Rooms/>}></Route>
+            <Route path="/edit-room/:id" element={<EditRoom/>}></Route>
         </Routes>
     </>;
 }

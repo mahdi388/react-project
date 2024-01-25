@@ -38,7 +38,7 @@ function EditUser() {
             <form onSubmit={submitHandler}>
                 <input type="text" id='username' placeholder='Enter username' required={true} defaultValue={user.username}/>
                 <input type="text" id='password' placeholder='Enter password' required={true} defaultValue={user.password}/>
-                <input type="submit" value="register" disabled={isUpdatingUser}/>
+                <input type="submit" value="edit" disabled={isUpdatingUser}/>
             </form>
         </aside>
     </main>;

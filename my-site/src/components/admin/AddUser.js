@@ -33,7 +33,7 @@ function AddUser() {
                 <input type="text" id='username' placeholder='Enter username' required={true}/>
                 <input type="password" id='password' placeholder='Enter password' required={true}/>
                 <input type="password" id='repassword' placeholder='Repeat password' required={true}/>
-                <input type="submit" value="register" disabled={isAddingUser}/>
+                <input type="submit" value="add" disabled={isAddingUser}/>
             </form>
         </aside>
     </main>;

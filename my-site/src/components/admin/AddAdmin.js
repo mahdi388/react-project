@@ -38,7 +38,7 @@ function Register() {
                     <label htmlFor="manager">Manager:</label>
                     <input type="checkbox" id="manager"/>
                 </div>
-                <input type="submit" value="register" disabled={isAddingAdmin}/>
+                <input type="submit" value="add" disabled={isAddingAdmin}/>
             </form>
         </aside>
     </main>;
