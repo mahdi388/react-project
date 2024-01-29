@@ -9,6 +9,8 @@ import EditUser from "./EditUser";
 import AddRoom from "./AddRoom";
 import Rooms from "./Rooms";
 import EditRoom from "./EditRoom";
+import AddReservation from "./AddReservation";
+import Reservations from "./Reservations";
 
 function AdminMain() {
     var navigate=useNavigate()
@@ -80,8 +82,8 @@ function AdminMain() {
                             <li onMouseEnter={openUl} onMouseLeave={closeUl} onTouchEnd={openCloseUl}>
                                 <div>reservation</div>
                                 <ul>
-                                    <li>list</li>
-                                    <li>add</li>
+                                    <li><Link to="/admin/reservations">list</Link></li>
+                                    <li><Link to="/admin/add-reservation">add</Link></li>
                                 </ul>
                             </li>
                         </> : <>
@@ -116,6 +118,8 @@ function AdminMain() {
             <Route path="/add-room" element={<AddRoom/>}></Route>
             <Route path="/rooms" element={<Rooms/>}></Route>
             <Route path="/edit-room/:id" element={<EditRoom/>}></Route>
+            <Route path="/add-reservation" element={<AddReservation/>}></Route>
+            <Route path="/reservations" element={<Reservations/>}></Route>
         </Routes>
     </>;
 }
