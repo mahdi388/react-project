@@ -11,6 +11,7 @@ import Rooms from "./Rooms";
 import EditRoom from "./EditRoom";
 import AddReservation from "./AddReservation";
 import Reservations from "./Reservations";
+import PaymentCheck from "./PaymentCheck";
 
 function AdminMain() {
     var navigate=useNavigate()
@@ -120,6 +121,7 @@ function AdminMain() {
             <Route path="/edit-room/:id" element={<EditRoom/>}></Route>
             <Route path="/add-reservation" element={<AddReservation/>}></Route>
             <Route path="/reservations" element={<Reservations/>}></Route>
+            <Route path="/payments" element={<PaymentCheck/>}></Route>
         </Routes>
     </>;
 }
