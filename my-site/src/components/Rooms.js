@@ -8,7 +8,7 @@ import { useContext } from 'react'
 import {reservationsPriceContext,dateToString} from '../App'
 
 function Rooms({user}) {
-    const {data:rooms,isSuccess}=useGetRoomsQuery()
+    const {data:rooms}=useGetRoomsQuery()
     const {data:reservations}=useGetReservationsQuery()
     const [like]=useLikeRoomMutation()
     const [searchedRooms,setSearchedRooms]=useState([])
@@ -16,6 +16,7 @@ function Rooms({user}) {
     const navigate=useNavigate()
     const [date,setDate]=useState(new Date(''))
     const [nights,setNights]=useState(1)
+    const [roomsWithBookedDates,setRoomsWithBookedDates]=useState([])
     const getReservationsPrice=useContext(reservationsPriceContext)
     const matchLikes=(rooms)=>{
         try{
@@ -29,10 +30,45 @@ function Rooms({user}) {
         }
     }
     useMemo(()=>{
-        if(isSuccess){
-            setSearchedRooms(matchLikes(rooms))
+        if(rooms&&reservations){
+            let temp=[]
+            for (let i = 0; i < rooms.length; i++) {
+                let room = rooms[i]
+                var bookedDates=[]
+                for (let reservation of reservations) {
+                    if(reservation.room==room.id){
+                        let date=new Date(reservation.date)
+                        for (let j = 0; j <= reservation.nights; j++) {
+                            bookedDates.push(new Date(date.getFullYear(),date.getMonth(),date.getDate()+j))
+                        }
+                    }
+                }
+                temp.push({...room,bookedDates:bookedDates})
+            }
+            setSearchedRooms(matchLikes(temp))
+            setRoomsWithBookedDates(matchLikes(temp))
         }
-    },[rooms])
+    },[rooms,reservations])
+    useMemo(()=>{
+        if(rooms&&reservations){
+            if(isNaN(date)){
+                setSearchedRooms(matchLikes(rooms))
+            }else{
+                var bookingDates=[]
+                for (let i = 0; i <= nights; i++) {
+                    bookingDates.push(new Date(date.getFullYear(),date.getMonth(),date.getDate()+i))
+                }
+                let temp=[]
+                for (let room of roomsWithBookedDates) {
+                    let bookingAndBookedDates=bookingDates.filter(date=>room.bookedDates.map(bookedDate=>bookedDate.getTime()).includes(date.getTime()))
+                    if(bookingAndBookedDates.length==0){
+                        temp.push(room)
+                    }
+                }
+                setSearchedRooms(matchLikes(temp))
+            }
+        }
+    },[date,nights])
     const likeHandler=room=>{
         try {
             if(room.liked){
@@ -58,33 +94,16 @@ function Rooms({user}) {
                 document.getElementById('date').setCustomValidity('Please enter date.')
                 document.getElementById('date').reportValidity()
             }else{
-                var bookedDates=[]
-                for (let i of reservations) {
-                    if(i.room==roomId){
-                        let date=new Date(i.date)
-                        for (let j = 0; j <= i.nights; j++) {
-                            bookedDates.push(new Date(date.getFullYear(),date.getMonth(),date.getDate()+j))
-                        }
-                    }
-                }
-                var bookingDates=[]
-                for (let i = 0; i <= nights; i++) {
-                    bookingDates.push(new Date(date.getFullYear(),date.getMonth(),date.getDate()+i))
-                }
-                var bookingAndBookedDates=bookingDates.filter(date=>bookedDates.map(bookedDate=>bookedDate.getTime()).includes(date.getTime()))
-                if(bookingAndBookedDates.length>0){
-                    alert("This room is reserved on these dates:\n"+bookingAndBookedDates.map(date=>`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`).join('\n'))
-                }else{
-                    await reserve({
-                        "user": user.id,
-                        "room": roomId,
-                        "date": dateToString(date),
-                        "nights": Number(nights),
-                        "is_finaly": false,
-                    })
-                    getReservationsPrice()
-                    alert("Your room has been successfully booked. Go to the reservation page to finalize.")
-                }
+                await reserve({
+                    "user": user.id,
+                    "room": roomId,
+                    "date": dateToString(date),
+                    "nights": Number(nights),
+                    "is_finaly": false
+                })
+                getReservationsPrice()
+                alert("Your room has been successfully booked. Go to the reservation page to finalize.")
+                navigate('/')
             }
         } else {
             if(window.confirm('To reserve this room you must be log in.\nDo you want to log in?')){

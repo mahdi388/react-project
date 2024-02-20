@@ -10,6 +10,7 @@ import Reservations from "./components/Reservations";
 import axios from 'axios'
 import Reserving from "./components/Reserving";
 import Main from "./components/Main";
+import Foods from "./components/Foods";
 
 export const reservationsPriceContext=createContext()
 export const dateToString=d=>`${d.getFullYear()}-${("0" +(d.getMonth()+1)).slice(-2)}-${("0" + d.getDate()).slice(-2)}`
@@ -57,7 +58,7 @@ function App() {
         <ul>
           <li className="home"><b><Link to="/">Home</Link></b></li>
           <li><Link to="/rooms">search rooms</Link></li>
-          <li>search food</li>
+          <li><Link to="/foods">search foods</Link></li>
           {<li><Link to="/reservations">reservation{user && ` | ${reservationsPrice}$`}</Link></li>}
         </ul>
         <ul>
@@ -78,6 +79,7 @@ function App() {
         <Route path="/not-found" element={<NotFound/>}></Route>
         <Route path="/reservations" element={<Reservations user={user}/>}></Route>
         <Route path="/reserving" element={<Reserving user={user}/>}></Route>
+        <Route path="/foods/*" element={<Foods/>}></Route>
         <Route path="/*" element={<Navigate to="/not-found"/>}></Route>
       </Routes>
     </reservationsPriceContext.Provider>

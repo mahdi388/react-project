@@ -1,5 +1,5 @@
 import "../../styles/admin/main.scss"
-import { Routes, Route, Link, useNavigate } from 'react-router-dom'
+import { Routes, Route, Link, useNavigate, Navigate } from 'react-router-dom'
 import Login from "./Login";
 import AddAdmin from "./AddAdmin";
 import { useEffect, useState } from "react";
@@ -12,6 +12,7 @@ import EditRoom from "./EditRoom";
 import AddReservation from "./AddReservation";
 import Reservations from "./Reservations";
 import PaymentCheck from "./PaymentCheck";
+import NotFound from "../NotFound";
 
 function AdminMain() {
     var navigate=useNavigate()
@@ -111,6 +112,7 @@ function AdminMain() {
             </header>
         }
         <Routes>
+            <Route path="/"></Route>
             <Route path="/login" element={<Login setAdmin={setAdmin}/>}></Route>
             <Route path="/add-admin" element={<AddAdmin/>}></Route>
             <Route path="/add-user" element={<AddUser/>}></Route>
@@ -122,6 +124,8 @@ function AdminMain() {
             <Route path="/add-reservation" element={<AddReservation/>}></Route>
             <Route path="/reservations" element={<Reservations/>}></Route>
             <Route path="/payments" element={<PaymentCheck/>}></Route>
+            <Route path="/not-found" element={<NotFound/>}></Route>
+            <Route path="/*" element={<Navigate to="/not-found"/>}></Route>
         </Routes>
     </>;
 }

@@ -1,11 +1,10 @@
 import "../../styles/reservations.scss"
-import { Link } from "react-router-dom";
 import {useGetReservationsQuery,useDeleteReservationMutation,useUpdateReservationMutation} from '../../redux/services/reservationsApi'
 import {useGetRoomsQuery} from '../../redux/services/roomsApi'
 import {useGetUsersQuery} from '../../redux/services/usersApi'
 import {dateToString} from '../../App'
 
-function Reservations({user}) {
+function Reservations() {
     const {data:allReservations,isLoading:isLoadingReservations}=useGetReservationsQuery()
     const {data:rooms,isLoading:isLoadingRooms}=useGetRoomsQuery()
     const {data:users,isLoading:isLoadingUsers}=useGetUsersQuery()
