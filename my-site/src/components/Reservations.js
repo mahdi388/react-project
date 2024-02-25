@@ -1,15 +1,21 @@
 import "../styles/reservations.scss"
 import { Link } from "react-router-dom";
 import {useGetReservationsQuery,useDeleteReservationMutation,useUpdateReservationMutation} from '../redux/services/reservationsApi'
+import {useGetOrdersQuery,useDeleteOrderMutation,useUpdateOrderMutation} from '../redux/services/ordersApi'
 import {useGetRoomsQuery} from '../redux/services/roomsApi'
+import {useGetFoodsQuery} from '../redux/services/foodsApi'
 import { useContext } from 'react'
 import {reservationsPriceContext,dateToString} from '../App'
 
-function Reservations({user}) {
+function Reservations({user,getOrdersPrice}) {
     var {data:allReservations,isLoading:isLoadingReservations}=useGetReservationsQuery()
+    const {data:allOrders,isLoading:isLoadingOrders}=useGetOrdersQuery()
     const {data:rooms,isLoading:isLoadingRooms}=useGetRoomsQuery()
-    const [remove]=useDeleteReservationMutation()
-    const [update]=useUpdateReservationMutation()
+    const {data:foods,isLoading:isLoadingFoods}=useGetFoodsQuery()
+    const [deleteReservation]=useDeleteReservationMutation()
+    const [updateReservation]=useUpdateReservationMutation()
+    const [deleteOrder]=useDeleteOrderMutation()
+    const [updateOrder]=useUpdateOrderMutation()
     const getReservationsPrice=useContext(reservationsPriceContext)
     if(!user){
         return <main style={{display:"flex",justifyContent:"center",alignItems:"center",fontSize:'20px'}}>
@@ -23,9 +29,16 @@ function Reservations({user}) {
         if(!isLoadingReservations){
             var reservations=allReservations.filter(i=>i.user==user.id).filter(i=>!i.is_finaly).map(i=>{return {...i,date:new Date(i.date)}})
         }
-        const removeHandler=async id=>{
-            await remove(id)
+        if(!isLoadingOrders){
+            var orders=allOrders.filter(i=>i.user==user.id).filter(i=>!i.is_finaly)
+        }
+        const deleteReservationHandler=async id=>{
+            await deleteReservation(id)
             getReservationsPrice()
+        }
+        const deleteOrderHandler=async id=>{
+            await deleteOrder(id)
+            getOrdersPrice()
         }
         const changeHandler=({target},name)=>{
             target.classList.add('hidden')
@@ -33,11 +46,23 @@ function Reservations({user}) {
             document.querySelector(`#room${target.dataset.id} .${name} .cancel-button`).classList.remove('hidden')
             document.querySelector(`#room${target.dataset.id} .${name} input`).classList.remove('hidden')
         }
+        const changeQtyHandler=({target})=>{
+            target.classList.add('hidden')
+            document.querySelector(`#food${target.dataset.id} .insert-button`).classList.remove('hidden')
+            document.querySelector(`#food${target.dataset.id} .cancel-button`).classList.remove('hidden')
+            document.querySelector(`#food${target.dataset.id} input`).classList.remove('hidden')
+        }
         const cancelHandler=({target},name)=>{
             document.querySelector(`#room${target.dataset.id} .${name} .change-button`).classList.remove('hidden')
             document.querySelector(`#room${target.dataset.id} .${name} .insert-button`).classList.add('hidden')
             document.querySelector(`#room${target.dataset.id} .${name} .cancel-button`).classList.add('hidden')
             document.querySelector(`#room${target.dataset.id} .${name} input`).classList.add('hidden')
+        }
+        const cancelQtyHandler=({target})=>{
+            document.querySelector(`#food${target.dataset.id} .change-button`).classList.remove('hidden')
+            document.querySelector(`#food${target.dataset.id} .insert-button`).classList.add('hidden')
+            document.querySelector(`#food${target.dataset.id} .cancel-button`).classList.add('hidden')
+            document.querySelector(`#food${target.dataset.id} input`).classList.add('hidden')
         }
         const changeDate=async ({target})=>{
             let reservation=allReservations.find(reservation=>reservation.id==target.dataset.id)
@@ -60,7 +85,7 @@ function Reservations({user}) {
             if(bookingAndBookedDates.length>0){
                 alert("This room is reserved on these dates:\n"+bookingAndBookedDates.map(date=>`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`).join('\n'))
             }else{
-                await update({
+                await updateReservation({
                     ...reservation,
                     date:dateToString(date)
                 })
@@ -92,7 +117,7 @@ function Reservations({user}) {
             if(bookingAndBookedDates.length>0){
                 alert("This room is reserved on these dates:\n"+bookingAndBookedDates.map(date=>`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`).join('\n'))
             }else{
-                await update({
+                await updateReservation({
                     ...reservation,
                     nights:nights,
                     date:dateToString(date)
@@ -104,20 +129,33 @@ function Reservations({user}) {
                 document.querySelector(`#room${target.dataset.id} .nights input`).classList.add('hidden')
             }
         }
+        const changeQty=async ({target})=>{
+            let order=orders.find(i=>i.id==target.dataset.id)
+            let qty=Number(document.querySelector(`#food${target.dataset.id} input`).value)
+            await updateOrder({
+                ...order,
+                qty:qty
+            })
+            getOrdersPrice()
+            document.querySelector(`#food${target.dataset.id} .change-button`).classList.remove('hidden')
+            document.querySelector(`#food${target.dataset.id} .insert-button`).classList.add('hidden')
+            document.querySelector(`#food${target.dataset.id} .cancel-button`).classList.add('hidden')
+            document.querySelector(`#food${target.dataset.id} input`).classList.add('hidden')
+        }
         return <main className="reservations">
-            {isLoadingReservations || isLoadingRooms ? 'Loading...' :
+            {isLoadingReservations || isLoadingRooms || isLoadingOrders || isLoadingFoods ? 'Loading...' :
                 <>
-                    {reservations.length==0 ? <h1>You have not any reservations</h1> :
+                    {reservations.length>0 &&
                         <>
                             <table>
                                 <thead>
                                     <tr>
                                         <th style={{width:'100px'}}>room</th>
-                                        <th style={{width:'400px'}}>date</th>
+                                        <th style={{width:'350px'}}>date</th>
                                         <th style={{width:'300px'}}>nights</th>
-                                        <th>price</th>
-                                        <th>total</th>
-                                        <th></th>
+                                        <th style={{width:'100px'}}>price</th>
+                                        <th style={{width:'100px'}}>total</th>
+                                        <th style={{width:'50px'}}></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -179,18 +217,80 @@ function Reservations({user}) {
                                         </td>
                                         <td>
                                             <div>
-                                                <i className="fa fa-trash" onClick={()=>removeHandler(i.id)}></i>
+                                                <i className="fa fa-trash" onClick={()=>deleteReservationHandler(i.id)}></i>
                                             </div>
                                         </td>
                                     </tr>)}
                                 </tbody>
                             </table>
-                            <Link to='/reserving'>
-                                <button>
-                                    Payment
-                                </button>
-                            </Link>
                         </>
+                    }
+                    {orders.length>0 &&
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style={{width:'200px'}}>food</th>
+                                    <th style={{width:'300px'}}>qty</th>
+                                    <th style={{width:'100px'}}>price</th>
+                                    <th style={{width:'100px'}}>total</th>
+                                    <th style={{width:'70px'}}></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {orders.map(i=><tr key={i.id} id={'food'+i.id}>
+                                    <td>
+                                        <div>
+                                            <img src={`/images/foods/${foods.find(food=>food.id==i.food).images[0]}`}/>
+                                        </div>
+                                    </td>
+                                    <td className="qty">
+                                        <div>
+                                            <div>
+                                                <div>{i.qty}</div>
+                                                <div>
+                                                    <input type="number" className="hidden" defaultValue={i.qty} min="1"/>
+                                                </div>
+                                            </div>
+                                            <div className="buttons">
+                                                <button className="change-button" data-id={i.id} onClick={changeQtyHandler}>
+                                                    Change
+                                                </button>
+                                                <button className="insert-button hidden" data-id={i.id} onClick={changeQty}>
+                                                    Insert
+                                                </button>
+                                                <button className="cancel-button hidden" data-id={i.id} onClick={cancelQtyHandler}>
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            {foods.find(food=>food.id==i.food).price}$
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            {i.qty*foods.find(food=>food.id==i.food).price}$
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <i className="fa fa-trash" onClick={()=>deleteOrderHandler(i.id)}></i>
+                                        </div>
+                                    </td>
+                                </tr>)}
+                            </tbody>
+                        </table>
+                    }
+                    {reservations.length==0 && orders.length==0 ?
+                    <h1>You have not any reservations and orders</h1>
+                    :
+                    <Link to='/reserving'>
+                        <button>
+                            Payment
+                        </button>
+                    </Link>
                     }
                 </>
             }

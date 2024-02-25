@@ -5,6 +5,7 @@ import reservationsApi from './services/reservationsApi'
 import paymentsApi from './services/paymentsApi'
 import adminsApi from './services/adminsApi'
 import foodsApi from './services/foodsApi'
+import ordersApi from './services/ordersApi'
 
 export default configureStore({
     reducer:{
@@ -13,7 +14,8 @@ export default configureStore({
         [reservationsApi.reducerPath]:reservationsApi.reducer,
         [paymentsApi.reducerPath]:paymentsApi.reducer,
         [adminsApi.reducerPath]:adminsApi.reducer,
-        [foodsApi.reducerPath]:foodsApi.reducer
+        [foodsApi.reducerPath]:foodsApi.reducer,
+        [ordersApi.reducerPath]:ordersApi.reducer
     },
     middleware:getDefaultMiddleware=>{
         return getDefaultMiddleware()
@@ -23,5 +25,6 @@ export default configureStore({
         .concat(paymentsApi.middleware)
         .concat(adminsApi.middleware)
         .concat(foodsApi.middleware)
+        .concat(ordersApi.middleware)
     }
 })

@@ -11,12 +11,14 @@ import axios from 'axios'
 import Reserving from "./components/Reserving";
 import Main from "./components/Main";
 import Foods from "./components/Foods";
+import Food from "./components/Food";
 
 export const reservationsPriceContext=createContext()
 export const dateToString=d=>`${d.getFullYear()}-${("0" +(d.getMonth()+1)).slice(-2)}-${("0" + d.getDate()).slice(-2)}`
 
 function App() {
   var [reservationsPrice,setReservationsPrice]=useState(0)
+  var [ordersPrice,setOrdersPrice]=useState(0)
   var navigate=useNavigate()
   let localStorageHandler=()=>{
     const localStorageUser=JSON.parse(localStorage.getItem('user'))
@@ -45,7 +47,23 @@ function App() {
       .then(()=>setReservationsPrice(reservationsPrice))
     }
   }
+  const getOrdersPrice=()=>{
+    if(user){
+      let ordersPrice=0
+      axios.get(`orders?user=${user.id}&is_finaly=false`)
+      .then(res=>res.data)
+      .then(async orders=>{
+        for (let i of orders) {
+          await axios.get('foods/'+i.food)
+          .then(res=>res.data)
+          .then(food=>ordersPrice+=food.price*i.qty)
+        }
+      })
+      .then(()=>setOrdersPrice(ordersPrice))
+    }
+  }
   useEffect(getReservationsPrice,[user])
+  useEffect(getOrdersPrice,[user])
   const logout=()=>{
     localStorage.setItem('user',null)
     setUser(null)
@@ -59,7 +77,7 @@ function App() {
           <li className="home"><b><Link to="/">Home</Link></b></li>
           <li><Link to="/rooms">search rooms</Link></li>
           <li><Link to="/foods">search foods</Link></li>
-          {<li><Link to="/reservations">reservation{user && ` | ${reservationsPrice}$`}</Link></li>}
+          {<li><Link to="/reservations">reservation{user && ` | ${reservationsPrice+ordersPrice}$`}</Link></li>}
         </ul>
         <ul>
           {user ? 
@@ -77,9 +95,10 @@ function App() {
         <Route path="/login" element={<Login setUser={setUser}/>}></Route>
         <Route path="/rooms/*" element={<Rooms user={user}/>}></Route>
         <Route path="/not-found" element={<NotFound/>}></Route>
-        <Route path="/reservations" element={<Reservations user={user}/>}></Route>
-        <Route path="/reserving" element={<Reserving user={user}/>}></Route>
-        <Route path="/foods/*" element={<Foods/>}></Route>
+        <Route path="/reservations" element={<Reservations user={user} getOrdersPrice={getOrdersPrice}/>}></Route>
+        <Route path="/reserving" element={<Reserving user={user} getOrdersPrice={getOrdersPrice}/>}></Route>
+        <Route path="/foods/" element={<Foods/>}></Route>
+        <Route path="/foods/:id" element={<Food user={user} getOrdersPrice={getOrdersPrice}/>}></Route>
         <Route path="/*" element={<Navigate to="/not-found"/>}></Route>
       </Routes>
     </reservationsPriceContext.Provider>
