@@ -21,10 +21,10 @@ const foodsApi=createApi({
             invalidatesTags:['foods']
         }),
         updateFood:builder.mutation({
-            query:({id,images,capacity,price,info,likers})=>({
+            query:({id,name,images,type,price,info})=>({
                 url:'foods/'+id,
                 method:'PUT',
-                body:JSON.stringify({images,capacity,price,info,likers}),
+                body:JSON.stringify({name,images,type,price,info}),
                 headers: {
                     'Content-Type': 'application/json'
                 }

@@ -1,15 +1,25 @@
 import "../../styles/admin/add_room.scss"
-import {useUpdateRoomMutation,useGetRoomQuery} from '../../redux/services/roomsApi'
-import {useNavigate,useParams} from 'react-router-dom'
-import { useState } from "react"
+import {useAddFoodMutation, useGetFoodsQuery} from '../../redux/services/foodsApi'
+import {useNavigate} from 'react-router-dom'
+import { useMemo, useState } from "react"
 
-function EditRoom() {
-    const [updateRoom,{isLoading:isUpdatingRoom}]=useUpdateRoomMutation()
+function AddFood() {
+    const [addFood,{isLoading:isAddingFood}]=useAddFoodMutation()
+    const {data:foods}=useGetFoodsQuery()
     const navigate=useNavigate()
     const [images,setImages]=useState([''])
-    const [isSetImages,setIsSetImages]=useState(true)
-    const params=useParams()
-    const {data:room,isLoading}=useGetRoomQuery(params.id)
+    const [types,setTypes]=useState([])
+    useMemo(()=>{
+        if (foods) {
+            var tempTypes=[]
+            for (let food of foods) {
+                if(!tempTypes.includes(food.type)){
+                    tempTypes.push(food.type)
+                }
+            }
+            setTypes(tempTypes)
+        }
+    },[foods])
     const submitHandler=async (event)=>{
         event.preventDefault()
         let imgs=images.filter(i=>i.length>0)
@@ -17,15 +27,14 @@ function EditRoom() {
             alert('You have not selected a photo.')
             return
         }
-        let changedRoom={
-            id:params.id,
+        let food={
+            name:event.target['name'].value,
             images:imgs,
-            capacity:Number(event.target['capacity'].value),
+            type:event.target['type'].value,
             price:Number(event.target['price'].value),
-            info:event.target['info'].value,
-            likers:room.likers
+            info:event.target['info'].value
         }
-        updateRoom(changedRoom).then(()=>{
+        addFood(food).then(()=>{
             alert('Success')
             navigate('/admin')
         })
@@ -36,25 +45,14 @@ function EditRoom() {
     const deleteImage=num=>{
         setImages(images.filter((img,index)=>index!=num))
     }
-    if(isLoading){
-        return <main style={{minHeight:'calc(100vh - 53px)',display:'flex',justifyContent:'center',alignItems:'center'}}>
-            <h1>
-                Loading...
-            </h1>
-        </main>
-    }
-    const setRoomImages=()=>{
-        setImages(room.images)
-        setIsSetImages(false)
-    }
     return <main className="add-room">
-        {(images!=room.images && isSetImages) && setRoomImages()}
         <aside>
-            <h2>Edit Room</h2>
+            <h2>Add Food</h2>
             <form onSubmit={submitHandler}>
-                <input type="number" id='capacity' placeholder='Enter capacity' required={true} min='1' defaultValue={room.capacity}/>
-                <input type="number" id='price' placeholder='Enter price' required={true} min='1' defaultValue={room.price}/>
-                <input type="text" id='info' placeholder='Enter info' defaultValue={room.info}/>
+                <input type="text" id='name' placeholder='Enter name' required={true} autoComplete="off"/>
+                <input type="text" id='type' placeholder='Enter type' required={true} list="types" autoComplete="off"/>
+                <input type="number" id='price' placeholder='Enter price' min='1' required={true}/>
+                <input type="text" id='info' placeholder='Enter info' autoComplete="off"/>
                 <aside id="images">
                     {images.map((img,index)=>
                         <div className="image" key={index}>
@@ -68,10 +66,13 @@ function EditRoom() {
                         <i className="fa fa-plus"></i>
                     </button>
                 </aside>
-                <input type="submit" value="change" disabled={isUpdatingRoom}/>
+                <input type="submit" value="add" disabled={isAddingFood}/>
             </form>
         </aside>
+        <datalist id="types">
+            {types.map(type=><option key={type} value={type}/>)}
+        </datalist>
     </main>;
 }
 
-export default EditRoom;
+export default AddFood;

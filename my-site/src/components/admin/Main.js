@@ -13,6 +13,9 @@ import AddReservation from "./AddReservation";
 import Reservations from "./Reservations";
 import PaymentCheck from "./PaymentCheck";
 import NotFound from "../NotFound";
+import AddFood from "./AddFood";
+import Foods from "./Foods";
+import EditFood from "./EditFood";
 
 function AdminMain() {
     var navigate=useNavigate()
@@ -82,6 +85,13 @@ function AdminMain() {
                                 </ul>
                             </li>
                             <li onMouseEnter={openUl} onMouseLeave={closeUl} onTouchEnd={openCloseUl}>
+                                <div>foods</div>
+                                <ul>
+                                    <li><Link to="/admin/foods">list</Link></li>
+                                    <li><Link to="/admin/add-food">add food</Link></li>
+                                </ul>
+                            </li>
+                            <li onMouseEnter={openUl} onMouseLeave={closeUl} onTouchEnd={openCloseUl}>
                                 <div>reservation</div>
                                 <ul>
                                     <li><Link to="/admin/reservations">list</Link></li>
@@ -121,6 +131,9 @@ function AdminMain() {
             <Route path="/add-room" element={<AddRoom/>}></Route>
             <Route path="/rooms" element={<Rooms/>}></Route>
             <Route path="/edit-room/:id" element={<EditRoom/>}></Route>
+            <Route path="/add-food" element={<AddFood/>}></Route>
+            <Route path="/foods" element={<Foods/>}></Route>
+            <Route path="/edit-food/:id" element={<EditFood/>}></Route>
             <Route path="/add-reservation" element={<AddReservation/>}></Route>
             <Route path="/reservations" element={<Reservations/>}></Route>
             <Route path="/payments" element={<PaymentCheck/>}></Route>
