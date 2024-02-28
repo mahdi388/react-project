@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import {useGetReservationsQuery} from '../../redux/services/reservationsApi'
 import {useGetRoomsQuery} from '../../redux/services/roomsApi'
+import {useGetOrdersQuery} from '../../redux/services/ordersApi'
+import {useGetFoodsQuery} from '../../redux/services/foodsApi'
 import axios from 'axios'
 import "../../styles/admin/payment_check.scss"
 import {dateToString} from '../../App'
@@ -8,6 +10,8 @@ import {dateToString} from '../../App'
 function PaymentCheck() {
     const {data:reservations,isLoading:isReservatonsLoading}=useGetReservationsQuery()
     const {data:rooms,isLoading:isRoomsLoading}=useGetRoomsQuery()
+    const {data:orders,isLoading:isOrdersLoading}=useGetOrdersQuery()
+    const {data:foods,isLoading:isFoodsLoading}=useGetFoodsQuery()
     const paymentCode=new URLSearchParams(window.location.search).get('payment_code')
     const [payment,setPayment]=useState()
     if(paymentCode==null){
@@ -34,7 +38,7 @@ function PaymentCheck() {
             </h1>
         </main>
     }
-    if(payment==undefined || isReservatonsLoading || isRoomsLoading){
+    if(payment==undefined || isReservatonsLoading || isRoomsLoading || isOrdersLoading || isFoodsLoading){
         return <main style={{minHeight:'calc(100vh - 53px)',display:'flex',justifyContent:'center',alignItems:'center'}}>
             <h1>
                 Loading...
@@ -66,7 +70,7 @@ function PaymentCheck() {
                 return <div className="room" key={reservation.id}>
                     <div>
                         <div>
-                            <img src={`/images/rooms/${room.images[0]}`} alt="room1"/>
+                            <img src={`/images/rooms/${room.images[0]}`}/>
                             <div className="more-info">
                                 <div>
                                     <div className="bold">Date :</div>
@@ -93,6 +97,32 @@ function PaymentCheck() {
                                 <div>
                                     <div className="bold">Total :</div>
                                     <div>{room.price*reservation.nights}$</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        )}
+        {orders.filter(order=>payment.orders.includes(order.id)).map(
+            order=>{
+                let food=foods.find(food=>order.food==food.id)
+                return <div className="room" key={order.id}>
+                    <div>
+                        <div>
+                            <img src={`/images/foods/${food.images[0]}`}/>
+                            <div className="more-info">
+                                <div>
+                                    <div className="bold">Qty :</div>
+                                    <div>{order.qty}</div>
+                                </div>
+                                <div>
+                                    <div className="bold">Price :</div>
+                                    <div>{food.price}$</div>
+                                </div>
+                                <div>
+                                    <div className="bold">Total :</div>
+                                    <div>{food.price*order.qty}$</div>
                                 </div>
                             </div>
                         </div>

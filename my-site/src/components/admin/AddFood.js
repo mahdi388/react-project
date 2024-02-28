@@ -27,6 +27,10 @@ function AddFood() {
             alert('You have not selected a photo.')
             return
         }
+        if(foods.map(food=>food.name).includes(event.target['name'].value)){
+            alert('A food with this name is exist.')
+            return
+        }
         let food={
             name:event.target['name'].value,
             images:imgs,
