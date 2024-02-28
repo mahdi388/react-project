@@ -230,6 +230,7 @@ function Reservations({user,getOrdersPrice}) {
                             <thead>
                                 <tr>
                                     <th style={{width:'200px'}}>food</th>
+                                    <th style={{width:'200px'}}>image</th>
                                     <th style={{width:'300px'}}>qty</th>
                                     <th style={{width:'100px'}}>price</th>
                                     <th style={{width:'100px'}}>total</th>
@@ -238,6 +239,13 @@ function Reservations({user,getOrdersPrice}) {
                             </thead>
                             <tbody>
                                 {orders.map(i=><tr key={i.id} id={'food'+i.id}>
+                                    <td>
+                                        <div>
+                                            <b>
+                                            {foods.find(food=>food.id==i.food).name}
+                                            </b>
+                                        </div>
+                                    </td>
                                     <td>
                                         <div>
                                             <img src={`/images/foods/${foods.find(food=>food.id==i.food).images[0]}`}/>

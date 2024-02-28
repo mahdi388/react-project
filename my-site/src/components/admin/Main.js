@@ -16,6 +16,8 @@ import NotFound from "../NotFound";
 import AddFood from "./AddFood";
 import Foods from "./Foods";
 import EditFood from "./EditFood";
+import Orders from "./Orders";
+import AddOrder from "./AddOrder";
 
 function AdminMain() {
     var navigate=useNavigate()
@@ -92,10 +94,17 @@ function AdminMain() {
                                 </ul>
                             </li>
                             <li onMouseEnter={openUl} onMouseLeave={closeUl} onTouchEnd={openCloseUl}>
-                                <div>reservation</div>
+                                <div>reservations</div>
                                 <ul>
                                     <li><Link to="/admin/reservations">list</Link></li>
                                     <li><Link to="/admin/add-reservation">add</Link></li>
+                                </ul>
+                            </li>
+                            <li onMouseEnter={openUl} onMouseLeave={closeUl} onTouchEnd={openCloseUl}>
+                                <div>orders</div>
+                                <ul>
+                                    <li><Link to="/admin/orders">list</Link></li>
+                                    <li><Link to="/admin/add-order">add</Link></li>
                                 </ul>
                             </li>
                         </> : <>
@@ -136,6 +145,8 @@ function AdminMain() {
             <Route path="/edit-food/:id" element={<EditFood/>}></Route>
             <Route path="/add-reservation" element={<AddReservation/>}></Route>
             <Route path="/reservations" element={<Reservations/>}></Route>
+            <Route path="/orders" element={<Orders/>}></Route>
+            <Route path="/add-order" element={<AddOrder/>}></Route>
             <Route path="/payments" element={<PaymentCheck/>}></Route>
             <Route path="/not-found" element={<NotFound/>}></Route>
             <Route path="/*" element={<Navigate to="/not-found"/>}></Route>
