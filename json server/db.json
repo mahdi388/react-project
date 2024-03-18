@@ -1,0 +1,222 @@
+{
+  "users": [
+    {
+      "username": "ali",
+      "password": "1234",
+      "id": 1
+    },
+    {
+      "username": "mahdi",
+      "password": "1234",
+      "id": 2
+    }
+  ],
+  "admins": [
+    {
+      "username": "ali",
+      "password": "1234",
+      "manager": true,
+      "id": 1
+    }
+  ],
+  "foods": [
+    {
+      "name": "Pizza rest beef",
+      "images": [
+        "rest-beef-pizza.jpg"
+      ],
+      "type": "Pizza",
+      "price": 5,
+      "info": "beef neck meat - mushroom - onion - olive and white sauce",
+      "id": 1
+    },
+    {
+      "name": "Four seasons pizza",
+      "images": [
+        "Four seasons pizza 1.jpeg",
+        "Four seasons pizza 2.jpeg"
+      ],
+      "type": "Pizza",
+      "price": 7,
+      "info": "American pizza dough, handmade charcoal burger of mixed beef and lamb, chicken fillet, hot dog 70%, ham and chicken 90%, pepperoni 80%, sliced olives, corn, bell pepper, marinara sauce, mushrooms, pizza cheese, With 2 sauces for one person",
+      "id": 2
+    },
+    {
+      "name": "Chicken fillet sandwich",
+      "images": [
+        "Chicken fillet sandwich.jpg"
+      ],
+      "type": "Sandwich",
+      "price": 2,
+      "info": "2 pieces of chicken fillet, lettuce, tomato, baguette bread",
+      "id": 3
+    },
+    {
+      "name": "Hot dog sandwich",
+      "images": [
+        "Hot dog sandwich 1.jpg",
+        "Hot dog sandwich 2.jpg"
+      ],
+      "type": "Sandwich",
+      "price": 2,
+      "info": "A 70% hot dog, tomato",
+      "id": 4
+    },
+    {
+      "name": "Coca-Cola cans",
+      "images": [
+        "Coca-Cola cans.jpg"
+      ],
+      "type": "Drink",
+      "price": 1,
+      "info": "330ml",
+      "id": 5
+    },
+    {
+      "name": "Fanta soft drink",
+      "images": [
+        "Fanta soft drink.jpg"
+      ],
+      "type": "Drink",
+      "price": 1,
+      "info": "330ml",
+      "id": 6
+    },
+    {
+      "name": "Special salad",
+      "images": [
+        "Special salad.jpeg"
+      ],
+      "type": "Salad",
+      "price": 3,
+      "info": "Lettuce, tomatoes, capers, olives, colored bell peppers, white cheese, walnuts, parmesan cheese, special sauce",
+      "id": 7
+    },
+    {
+      "name": "Shirazi salad",
+      "images": [
+        "Shirazi salad.jpg"
+      ],
+      "type": "Salad",
+      "price": 1,
+      "info": "Cucumber, tomato, onion, watercress",
+      "id": 8
+    }
+  ],
+  "rooms": [
+    {
+      "images": [
+        "room1.jpg"
+      ],
+      "capacity": 2,
+      "price": 110,
+      "info": "This room is great. This room have 2 beds and one TV.",
+      "likers": [
+        2
+      ],
+      "id": 1
+    },
+    {
+      "images": [
+        "room2.jpg"
+      ],
+      "capacity": 4,
+      "price": 210,
+      "info": "This room is very great and big. This room have 1 TV, 2 tables and 7 chairs.",
+      "likers": [
+        2
+      ],
+      "id": 2
+    },
+    {
+      "images": [
+        "room3.jpg",
+        "room3-2.jpg"
+      ],
+      "capacity": 2,
+      "price": 80,
+      "info": "room is very luxary and this room have one TV and one bed.",
+      "likers": [
+        1
+      ],
+      "id": 3
+    },
+    {
+      "images": [
+        "room4.jpg"
+      ],
+      "capacity": 3,
+      "price": 160,
+      "info": "This room is long. This room have 2 beds and 1 TV.",
+      "likers": [
+        2,
+        1
+      ],
+      "id": 4
+    },
+    {
+      "images": [
+        "room5.jpg",
+        "room5-1.jpg"
+      ],
+      "capacity": 2,
+      "price": 95,
+      "info": "This room have 2 beds and 1 TV.",
+      "likers": [
+        1
+      ],
+      "id": 5
+    }
+  ],
+  "reservations": [
+    {
+      "user": 2,
+      "room": 1,
+      "date": "2024-03-01",
+      "nights": 2,
+      "is_finaly": true,
+      "id": 1
+    },
+    {
+      "user": 2,
+      "room": 2,
+      "date": "2024-03-01",
+      "nights": 1,
+      "is_finaly": true,
+      "id": 2
+    }
+  ],
+  "orders": [
+    {
+      "user": 2,
+      "food": 1,
+      "qty": 3,
+      "is_finaly": true,
+      "id": 1
+    },
+    {
+      "user": 2,
+      "food": 8,
+      "qty": 1,
+      "is_finaly": true,
+      "id": 2
+    }
+  ],
+  "payments": [
+    {
+      "name": "ali",
+      "family": "ahangari",
+      "payment_type": "Internet payment",
+      "payment_code": "09110a6c-62b6-4057-bbc8-3f1848057575",
+      "reservations": [
+        1,
+        2
+      ],
+      "orders": [
+        1,
+        2
+      ],
+      "id": 1
+    }
+  ]
+}
